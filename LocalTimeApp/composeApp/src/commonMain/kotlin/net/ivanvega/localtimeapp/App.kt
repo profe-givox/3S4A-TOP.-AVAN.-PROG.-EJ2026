@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeContentPadding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
@@ -34,17 +35,23 @@ import org.jetbrains.compose.resources.painterResource
 
 import localtimeapp.composeapp.generated.resources.Res
 import localtimeapp.composeapp.generated.resources.compose_multiplatform
+import localtimeapp.composeapp.generated.resources.eg
+import localtimeapp.composeapp.generated.resources.fr
+import localtimeapp.composeapp.generated.resources.id
+import localtimeapp.composeapp.generated.resources.jp
+import localtimeapp.composeapp.generated.resources.mx
+import org.jetbrains.compose.resources.DrawableResource
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 
-data class Country(val name: String, val zone: TimeZone)
+data class Country(val name: String, val zone: TimeZone, val image: DrawableResource)
 
 fun countries() = listOf(
-    Country("Japan", TimeZone.of("Asia/Tokyo")),
-    Country("France", TimeZone.of("Europe/Paris")),
-    Country("Mexico", TimeZone.of("America/Mexico_City")),
-    Country("Indonesia", TimeZone.of("Asia/Jakarta")),
-    Country("Egypt", TimeZone.of("Africa/Cairo")),
+    Country("Japan", TimeZone.of("Asia/Tokyo", ), Res.drawable.jp),
+    Country("France", TimeZone.of("Europe/Paris") , Res.drawable.fr),
+    Country("Mexico", TimeZone.of("America/Mexico_City"), Res.drawable.mx),
+    Country("Indonesia", TimeZone.of("Asia/Jakarta"), Res.drawable.id),
+    Country("Egypt", TimeZone.of("Africa/Cairo"), Res.drawable.eg),
 )
 
 /*
@@ -127,9 +134,20 @@ fun App(countries: List<Country> = countries()) {
                     expanded = showCountries,
                     onDismissRequest = { showCountries = false }
                 ) {
-                    countries().forEach { (name, zone) ->
+                    countries().forEach { (name, zone, image) ->
                         DropdownMenuItem(
-                            text = {   Text(name)},
+                            text = {
+
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Image(
+                                        painterResource(image),
+                                        modifier = Modifier.size(50.dp).padding(end = 10.dp),
+                                        contentDescription = "$name flag"
+                                    )
+                                    Text(name)
+                                }
+
+                            },
                             onClick = {
                                 timeAtLocation = currentTimeAt(name, zone)
                                 showCountries = false
