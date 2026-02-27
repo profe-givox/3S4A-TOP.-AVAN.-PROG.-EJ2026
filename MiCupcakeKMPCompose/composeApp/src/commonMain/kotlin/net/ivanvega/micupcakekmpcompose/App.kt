@@ -18,11 +18,14 @@ import org.jetbrains.compose.resources.painterResource
 
 import micupcakekmpcompose.composeapp.generated.resources.Res
 import micupcakekmpcompose.composeapp.generated.resources.compose_multiplatform
+import micupcakekmpcompose.composeapp.generated.resources.order_cupcakes
+import net.ivanvega.micupcakekmpcompose.ui.theme.CupcakeTheme
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 @Preview
 fun App() {
-    MaterialTheme {
+    CupcakeTheme {
         var showContent by remember { mutableStateOf(false) }
         Column(
             modifier = Modifier
@@ -41,7 +44,7 @@ fun App() {
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Image(painterResource(Res.drawable.compose_multiplatform), null)
-                    Text("Compose: $greeting")
+                    Text("Compose: ${stringResource(Res.string.order_cupcakes)}", color = MaterialTheme.colorScheme.primary)
                 }
             }
         }
