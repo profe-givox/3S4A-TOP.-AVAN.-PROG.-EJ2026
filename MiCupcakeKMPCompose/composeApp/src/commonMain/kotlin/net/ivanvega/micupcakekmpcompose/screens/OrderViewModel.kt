@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.plus
@@ -13,13 +14,46 @@ import net.ivanvega.micupcakekmpcompose.data.OrderUiState
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 
+
+/** Price for a single cupcake */
+private const val PRICE_PER_CUPCAKE = 2.00
+
+/** Additional cost for same day pickup of an order */
+private const val PRICE_FOR_SAME_DAY_PICKUP = 3.00
+
+
 class OrderViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(
         OrderUiState(pickupOptions = pickupOptions()))
 
     val uiState: StateFlow<OrderUiState> = _uiState.asStateFlow()
 
+    /**
+     * Set the quantity [numberCupcakes] of cupcakes for this order's state and update the price
+     */
+    fun setQuantity(numberCupcakes: Int) {
+        _uiState.update { currentState ->
+            currentState.copy(
+                quantity = numberCupcakes,
+                price = calculatePrice(quantity = numberCupcakes)
+            )
+        }
+    }
 
+    /**
+     * Returns the calculated price based on the order details.
+     */
+    private fun calculatePrice(
+        quantity: Int = _uiState.value.quantity,
+        pickupDate: String = _uiState.value.date
+    ): String {
+        var calculatedPrice = quantity * PRICE_PER_CUPCAKE
+        // If the user selected the first option (today) for pickup, add the surcharge
+        if (pickupOptions()[0] == pickupDate) {
+            calculatedPrice += PRICE_FOR_SAME_DAY_PICKUP
+        }
+        return "$calculatedPrice€"
+    }
 
     /**
      * Returns a list of date options starting with the current date and the following 3 dates.

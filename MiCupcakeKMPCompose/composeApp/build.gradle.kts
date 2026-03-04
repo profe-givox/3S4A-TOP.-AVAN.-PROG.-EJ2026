@@ -37,6 +37,10 @@ kotlin {
         }
         commonMain.dependencies {
 
+            implementation("org.jetbrains.compose.material:material-icons-core:1.7.3")
+
+            implementation("org.jetbrains.androidx.navigation:navigation-compose:2.9.2")
+
             implementation(libs.kotlinx.datetime)
 
             implementation(libs.compose.runtime)
