@@ -19,6 +19,7 @@ import org.jetbrains.compose.resources.painterResource
 import micupcakekmpcompose.composeapp.generated.resources.Res
 import micupcakekmpcompose.composeapp.generated.resources.compose_multiplatform
 import micupcakekmpcompose.composeapp.generated.resources.order_cupcakes
+import net.ivanvega.micupcakekmpcompose.screens.CupcakeApp
 import net.ivanvega.micupcakekmpcompose.ui.theme.CupcakeTheme
 import org.jetbrains.compose.resources.stringResource
 
@@ -26,7 +27,8 @@ import org.jetbrains.compose.resources.stringResource
 @Preview
 fun App() {
     CupcakeTheme {
-        var showContent by remember { mutableStateOf(false) }
+        CupcakeApp()
+        /*var showContent by remember { mutableStateOf(false) }
         Column(
             modifier = Modifier
                 .background(MaterialTheme.colorScheme.primaryContainer)
@@ -47,6 +49,6 @@ fun App() {
                     Text("Compose: ${stringResource(Res.string.order_cupcakes)}", color = MaterialTheme.colorScheme.primary)
                 }
             }
-        }
+        }*/
     }
 }
