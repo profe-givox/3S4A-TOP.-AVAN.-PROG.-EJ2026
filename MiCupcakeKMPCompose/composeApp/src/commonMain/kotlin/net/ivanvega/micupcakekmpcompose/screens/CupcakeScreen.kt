@@ -17,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -98,6 +99,9 @@ fun CupcakeApp(
             )
         }
     ) { innerPadding ->
+
+        val uiState by viewModel.uiState.collectAsState()
+
         NavHost(
             navController = navController,
             startDestination = CupcakeScreen.Start.name,
@@ -118,6 +122,27 @@ fun CupcakeApp(
                         .padding(16.dp)
                 )
 
+            }
+            composable (route= CupcakeScreen.Flavor.name) {
+                SelectOptionScreen(
+                    subtotal = uiState.price,
+                    options = DataSource.flavors.map{ stringResource (it)   },
+                    onSelectionChanged =  {  p -> viewModel.setFlavor(p) },
+                    onCancelButtonClicked = {},
+                    onNextButtonClicked = {navController.navigate(route = CupcakeScreen.Pickup.name)}
+
+                )
+            }
+
+            composable (route= CupcakeScreen.Pickup.name) {
+                SelectOptionScreen(
+                    subtotal = uiState.price,
+                    options = uiState.pickupOptions,
+                    onSelectionChanged = { p -> } ,
+                    onCancelButtonClicked = {},
+                    onNextButtonClicked = {navController.navigate(route = CupcakeScreen.Pickup.name)}
+
+                )
             }
         }
 
