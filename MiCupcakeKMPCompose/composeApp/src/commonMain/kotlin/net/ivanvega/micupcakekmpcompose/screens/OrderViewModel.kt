@@ -28,6 +28,19 @@ class OrderViewModel : ViewModel() {
 
     val uiState: StateFlow<OrderUiState> = _uiState.asStateFlow()
 
+
+    /**
+     * Set the [pickupDate] for this order's state and update the price
+     */
+    fun setDate(pickupDate: String) {
+        _uiState.update { currentState ->
+            currentState.copy(
+                date = pickupDate,
+                price = calculatePrice(pickupDate = pickupDate)
+            )
+        }
+    }
+
     /**
      * Set the [desiredFlavor] of cupcakes for this order's state.
      * Only 1 flavor can be selected for the whole order.
@@ -48,6 +61,13 @@ class OrderViewModel : ViewModel() {
                 price = calculatePrice(quantity = numberCupcakes)
             )
         }
+    }
+
+    /**
+     * Reset the order state
+     */
+    fun resetOrder() {
+        _uiState.value = OrderUiState(pickupOptions = pickupOptions())
     }
 
     /**

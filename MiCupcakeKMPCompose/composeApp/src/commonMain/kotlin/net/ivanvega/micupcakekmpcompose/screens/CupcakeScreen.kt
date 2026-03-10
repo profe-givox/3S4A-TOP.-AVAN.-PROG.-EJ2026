@@ -79,6 +79,17 @@ fun CupcakeAppBar(
     )
 }
 
+/**
+ * Resets the [OrderUiState] and pops up to [CupcakeScreen.Start]
+ */
+private fun cancelOrderAndNavigateToStart(
+    viewModel: OrderViewModel,
+    navController: NavHostController
+) {
+    viewModel.resetOrder()
+    navController.popBackStack(CupcakeScreen.Start.name, inclusive = false)
+}
+
 @Composable
 fun CupcakeApp(
     viewModel: OrderViewModel = viewModel{ OrderViewModel() },
@@ -128,7 +139,13 @@ fun CupcakeApp(
                     subtotal = uiState.price,
                     options = DataSource.flavors.map{ stringResource (it)   },
                     onSelectionChanged =  {  p -> viewModel.setFlavor(p) },
-                    onCancelButtonClicked = {},
+                    onCancelButtonClicked =  { // 1 actualizar estado viemodel
+
+                        cancelOrderAndNavigateToStart(viewModel, navController)
+                        // 2 navegar
+
+                        }
+                        ,
                     onNextButtonClicked = {navController.navigate(route = CupcakeScreen.Pickup.name)}
 
                 )
@@ -138,10 +155,22 @@ fun CupcakeApp(
                 SelectOptionScreen(
                     subtotal = uiState.price,
                     options = uiState.pickupOptions,
-                    onSelectionChanged = { p -> } ,
-                    onCancelButtonClicked = {},
-                    onNextButtonClicked = {navController.navigate(route = CupcakeScreen.Pickup.name)}
+                    onSelectionChanged = { p -> viewModel.setDate(p)   } ,
+                    onCancelButtonClicked = {
+                        cancelOrderAndNavigateToStart(viewModel, navController)
+                    },
+                    onNextButtonClicked = {navController.navigate(route = CupcakeScreen.Summary.name)}
 
+                )
+            }
+
+            composable (route = CupcakeScreen.Summary.name) {
+                OrderSummaryScreen(
+                   orderUiState = uiState,
+                    onCancelButtonClicked = {
+                        cancelOrderAndNavigateToStart(viewModel, navController)
+                    },
+                    onSendButtonClicked =  {a, b ->},
                 )
             }
         }
