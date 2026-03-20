@@ -7,7 +7,7 @@ interface DatabaseDriverFactory {
     fun createDriver(): SqlDriver
 }
 
-internal class Database(databaseDriverFactory: DatabaseDriverFactory) {
+class ItemDAO(databaseDriverFactory: DatabaseDriverFactory) {
     private val database = AppDatabase(databaseDriverFactory.createDriver())
     private val dbQuery = database.appDatabaseQueries
 
