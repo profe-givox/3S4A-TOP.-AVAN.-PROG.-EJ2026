@@ -6,6 +6,14 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import miinventorykmpcomposedesktop.composeapp.generated.resources.Res
+import miinventorykmpcomposedesktop.composeapp.generated.resources.item_entry_title
+import net.ivanvega.miinventorykmpcomposedesktop.NavigationDestination
+
+object ItemEntryDestination : NavigationDestination {
+    override val route = "item_entry"
+    override val titleRes = Res.string.item_entry_title
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
