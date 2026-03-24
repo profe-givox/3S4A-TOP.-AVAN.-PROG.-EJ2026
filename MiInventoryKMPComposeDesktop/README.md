@@ -67,3 +67,5 @@ Para lograr esto, se realizaron los siguientes ajustes:
 4. Se ajustó la lógica de la `TopAppBar` para mostrar dinámicamente el título "Editar Ítem" cuando el usuario se encuentra en la pantalla de edición.
 
 El siguiente paso será desarrollar la `EditItemScreen` para cargar los datos del ítem seleccionado, permitir su modificación y guardar los cambios en la base de datos.
+
+
