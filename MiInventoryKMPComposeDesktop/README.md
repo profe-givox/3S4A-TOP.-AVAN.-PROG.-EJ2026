@@ -46,13 +46,24 @@ También se incorporó un ViewModel para la pantalla de detalle, el cual obtiene
 Además, se creó la interfaz ItemDetailsScreen, donde ya se muestran el nombre, la cantidad disponible y el precio formateado como moneda. Se añadieron botones para vender y eliminar, junto con un diálogo de confirmación para borrado, aunque la lógica final de estas acciones todavía quedó pendiente de completar.
 Por último, se dejó preparada la estructura de navegación para una futura pantalla de edición de productos y se agregaron clases auxiliares para manejar mejor el estado de la UI y la conversión entre entidades y datos mostrados en pantalla.
 Bitácora técnica
-1.Se redireccionó el clic sobre un item de la lista hacia ItemDetailsDestination, enviando el id como argumento de navegación.
-2.Se registró una nueva ruta composable para la pantalla de detalle dentro de App.kt.
-3.Se integró SavedStateHandle en ItemDetailsViewModel para recuperar el parámetro itemId.
-4.Se modificó DatabaseDriverFactory.kt para que getItemById() devuelva un Flow<Item?>.
-5.Se añadió la librería app.cash.sqldelight:coroutines-extensions en build.gradle.kts y libs.versions.toml.
+1. Se redireccionó el clic sobre un item de la lista hacia ItemDetailsDestination, enviando el id como argumento de navegación.
+2. Se registró una nueva ruta composable para la pantalla de detalle dentro de App.kt.
+3. Se integró SavedStateHandle en ItemDetailsViewModel para recuperar el parámetro itemId.
+4. Se modificó DatabaseDriverFactory.kt para que getItemById() devuelva un Flow<Item?>.
+5. Se añadió la librería app.cash.sqldelight:coroutines-extensions en build.gradle.kts y libs.versions.toml.
 6. Se creó ItemDetailsViewModel.kt con un StateFlow<ItemDetailsUiState> derivado del DAO.
-7.Se agregaron estructuras de estado y funciones de mapeo en ItemViewModel.kt.
-8.Se implementó ItemDetailsScreen.kt con visualización de datos, botón de venta y confirmación de borrado.
-9.Se creó ItemEditScreen.kt con la definición de destino de navegación para edición.
-10. Quedó pendiente implementar la lógica real de actualización de stock y eliminación, ya que esos métodos siguen comentados.
+7. Se agregaron estructuras de estado y funciones de mapeo en ItemViewModel.kt.
+8. Se implementó ItemDetailsScreen.kt con visualización de datos, botón de venta y confirmación de borrado.
+9. Se creó ItemEditScreen.kt con la definición de destino de navegación para edición.
+10.Se quedó pendiente implementar la lógica real de actualización de stock y eliminación, ya que esos métodos siguen comentados.
+
+commit 24/03/2026 0417
+Se ha extendido la funcionalidad de navegación para soportar la edición de ítems existentes. Al hacer clic en un producto de la lista, ahora se navega a una pantalla de edición, pasando el ID del producto como parámetro.
+
+Para lograr esto, se realizaron los siguientes ajustes:
+1. Se definió un nuevo destino de navegación, `ItemEditDestination`, con una ruta que acepta el ID del ítem (`item_edit/{itemId}`).
+2. Se actualizó el `NavHost` en `App.kt` para incluir un nuevo `composable` que responde a esta ruta. Por el momento, esta ruta reutiliza la pantalla `AddItemScreen` como marcador de posición para la futura pantalla de edición.
+3. Se modificó `ItemListScreen` para que cada elemento de la lista sea clickeable, invocando la navegación hacia la ruta de edición con el ID correspondiente.
+4. Se ajustó la lógica de la `TopAppBar` para mostrar dinámicamente el título "Editar Ítem" cuando el usuario se encuentra en la pantalla de edición.
+
+El siguiente paso será desarrollar la `EditItemScreen` para cargar los datos del ítem seleccionado, permitir su modificación y guardar los cambios en la base de datos.

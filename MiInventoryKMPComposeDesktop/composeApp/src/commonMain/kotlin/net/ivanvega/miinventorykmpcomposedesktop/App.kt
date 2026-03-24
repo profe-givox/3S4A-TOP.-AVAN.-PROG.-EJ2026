@@ -43,6 +43,8 @@ import net.ivanvega.miinventorykmpcomposedesktop.ui.screens.ItemDetailsDestinati
 import net.ivanvega.miinventorykmpcomposedesktop.ui.screens.ItemDetailsScreen
 import net.ivanvega.miinventorykmpcomposedesktop.ui.screens.ItemDetailsViewModel
 import net.ivanvega.miinventorykmpcomposedesktop.ui.screens.ItemEditDestination
+import net.ivanvega.miinventorykmpcomposedesktop.ui.screens.ItemEditScreen
+import net.ivanvega.miinventorykmpcomposedesktop.ui.screens.ItemEditViewModel
 import org.jetbrains.compose.resources.stringResource
 
 
@@ -101,8 +103,10 @@ fun App(dataBaseFactory: DatabaseDriverFactory, navController: NavHostController
                 )
             },
             floatingActionButton = {
-                FloatingActionButton(onClick = { navController.navigate(ItemEntryDestination.route)} ) {
-                    Icon(Icons.Default.Add, contentDescription = "Add Item")
+                if (!canNavigateBack) {
+                    FloatingActionButton(onClick = { navController.navigate(ItemEntryDestination.route) }) {
+                        Icon(Icons.Default.Add, contentDescription = "Add Item")
+                    }
                 }
             }
         ) { paddingValues ->
@@ -140,6 +144,23 @@ fun App(dataBaseFactory: DatabaseDriverFactory, navController: NavHostController
                                                     savedStateHandle = this.createSavedStateHandle(),
                                                     itemsRepository = dao
                                                 )
+                        }
+                    )
+                }
+                composable(
+                    route = ItemEditDestination.routeWithArgs,
+                    arguments = listOf(navArgument(ItemEditDestination.itemIdArg) {
+                        type = NavType.IntType
+                    })
+                ) {
+                    ItemEditScreen(navigateBack = { navController.popBackStack() },
+                        onNavigateUp = { navController.navigateUp() },
+                        innerPadding = paddingValues,
+                        viewModel = viewModel {
+                                                    ItemEditViewModel(
+                                                        savedStateHandle = this.createSavedStateHandle(),
+                                                        itemsRepository = dao
+                                                    )
                         }
                     )
                 }
