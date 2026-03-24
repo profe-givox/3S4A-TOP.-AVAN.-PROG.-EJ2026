@@ -32,7 +32,10 @@ import org.jetbrains.compose.resources.StringResource
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import org.jetbrains.compose.resources.stringResource
 
 
 /**
@@ -53,27 +56,30 @@ interface NavigationDestination {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun App(dataBaseFactory: DatabaseDriverFactory) {
-    val navController = rememberNavController()
+fun App(dataBaseFactory: DatabaseDriverFactory, navController: NavHostController = rememberNavController()) {
     val dao = remember { ItemDAO(dataBaseFactory ) }
     val itemViewModel: ItemViewModel = viewModel{  ItemViewModel(dao) }
 
     // Get current back stack entry
     val backStackEntry by navController.currentBackStackEntryAsState()
     // Get the name of the current screen
-//    val currentScreen = NavigationDestination.valueOf(
-//        backStackEntry?.destination?.route ?: CupcakeScreen.Start.name
-//    )
+    val currentScreenTitle = when (backStackEntry?.destination?.route) {
+        ItemEntryDestination.route -> ItemEntryDestination.titleRes
+        else -> HomeDestination.titleRes
+    }
+    val canNavigateBack = navController.previousBackStackEntry != null
 
     MaterialTheme {
         Scaffold(
             topBar = {
                 TopAppBar(
                     title = {
-                        Text("Items")
+                        Text(stringResource(currentScreenTitle))
                             },
                     navigationIcon = {
-                        if (navController.previousBackStackEntry != null) {
+                        // La recomposición es activada por 'backStackEntry'.
+                        // 'canNavigateBack' se recalculará cuando 'backStackEntry' cambie.
+                        if (canNavigateBack) {
                             Icon(
                                 imageVector = Icons.Default.ArrowBack,
                                 contentDescription = "Back",
@@ -92,7 +98,7 @@ fun App(dataBaseFactory: DatabaseDriverFactory) {
                 }
             }
         ) { paddingValues ->
-            NavHost(navController = navController, HomeDestination.route) {
+            NavHost(navController = navController, startDestination = HomeDestination.route) {
                 composable(route = HomeDestination.route) {
                     ItemListScreen(
                         viewModel = itemViewModel,
