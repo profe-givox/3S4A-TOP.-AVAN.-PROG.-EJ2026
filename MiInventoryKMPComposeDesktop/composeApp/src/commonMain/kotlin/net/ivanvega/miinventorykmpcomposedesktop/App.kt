@@ -102,6 +102,9 @@ fun App(dataBaseFactory: DatabaseDriverFactory, navController: NavHostController
                 composable(route = HomeDestination.route) {
                     ItemListScreen(
                         viewModel = itemViewModel,
+                           onItemClick     = {
+                               navController.navigate("${ItemEntryDestination.route}/${it.id}")
+                                             },
                         modifier =  Modifier.fillMaxSize().padding(paddingValues)
 
                     )
