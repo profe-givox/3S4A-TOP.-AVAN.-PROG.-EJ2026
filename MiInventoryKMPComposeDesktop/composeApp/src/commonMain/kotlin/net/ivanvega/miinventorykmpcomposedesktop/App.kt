@@ -32,9 +32,17 @@ import org.jetbrains.compose.resources.StringResource
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.createSavedStateHandle
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.navArgument
+import androidx.savedstate.savedState
+import net.ivanvega.miinventorykmpcomposedesktop.ui.screens.ItemDetailsDestination
+import net.ivanvega.miinventorykmpcomposedesktop.ui.screens.ItemDetailsScreen
+import net.ivanvega.miinventorykmpcomposedesktop.ui.screens.ItemDetailsViewModel
+import net.ivanvega.miinventorykmpcomposedesktop.ui.screens.ItemEditDestination
 import org.jetbrains.compose.resources.stringResource
 
 
@@ -103,7 +111,7 @@ fun App(dataBaseFactory: DatabaseDriverFactory, navController: NavHostController
                     ItemListScreen(
                         viewModel = itemViewModel,
                            onItemClick     = {
-                               navController.navigate("${ItemEntryDestination.route}/${it.id}")
+                               navController.navigate("${ItemDetailsDestination.route}/${it.id}")
                                              },
                         modifier =  Modifier.fillMaxSize().padding(paddingValues)
 
@@ -115,6 +123,24 @@ fun App(dataBaseFactory: DatabaseDriverFactory, navController: NavHostController
                         onItemAdded = { navController.popBackStack()
                         },
                         Modifier.fillMaxSize().padding(paddingValues)
+                    )
+                }
+                composable(
+                    route = ItemDetailsDestination.routeWithArgs,
+                    arguments = listOf(navArgument(ItemDetailsDestination.itemIdArg) {
+                        type = NavType.IntType
+                    })
+                ) {
+                    ItemDetailsScreen(
+                        navigateToEditItem = { navController.navigate("${ItemEditDestination.route}/$it") },
+                        navigateBack = { navController.navigateUp() },
+                        modifier =  Modifier.fillMaxSize().padding(paddingValues),
+                        innerPadding = paddingValues,
+                        viewModel = viewModel { ItemDetailsViewModel(
+                                                    savedStateHandle = this.createSavedStateHandle(),
+                                                    itemsRepository = dao
+                                                )
+                        }
                     )
                 }
             }

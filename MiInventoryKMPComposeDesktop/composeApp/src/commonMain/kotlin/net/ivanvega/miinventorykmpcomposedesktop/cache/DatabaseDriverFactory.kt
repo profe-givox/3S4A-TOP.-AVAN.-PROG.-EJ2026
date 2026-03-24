@@ -1,7 +1,11 @@
 package net.ivanvega.miinventorykmpcomposedesktop.cache
 
+import app.cash.sqldelight.coroutines.asFlow
+import app.cash.sqldelight.coroutines.mapToOne
 import app.cash.sqldelight.db.SqlDriver
 import cache.Item
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 
 interface DatabaseDriverFactory {
     fun createDriver(): SqlDriver
@@ -27,7 +31,8 @@ class ItemDAO(databaseDriverFactory: DatabaseDriverFactory) {
         dbQuery.deleteItem(id)
     }
 
-    internal fun getItemById(id: Long): Item? {
-        return dbQuery.getItemById(id).executeAsOneOrNull()
+    internal fun getItemById(id: Long): Flow <Item?> {
+        return dbQuery.getItemById(id).asFlow().mapToOne(Dispatchers.IO)
     }
+
 }

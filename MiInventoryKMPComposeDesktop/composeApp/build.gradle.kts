@@ -31,6 +31,7 @@ kotlin {
             implementation(libs.sqlDelight.android.driver)
         }
         commonMain.dependencies {
+            implementation(libs.sqlDelight.coroutines.extensions)
             implementation(libs.sqlDelight.runtime)
             implementation(libs.compose.runtime)
             implementation(libs.compose.foundation)
