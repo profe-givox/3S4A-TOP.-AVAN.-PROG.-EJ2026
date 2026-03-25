@@ -47,6 +47,8 @@ import net.ivanvega.miinventorykmpcomposedesktop.ui.screens.ItemDetailsViewModel
 import net.ivanvega.miinventorykmpcomposedesktop.ui.screens.ItemEditDestination
 import net.ivanvega.miinventorykmpcomposedesktop.ui.screens.ItemEditScreen
 import net.ivanvega.miinventorykmpcomposedesktop.ui.screens.ItemEditViewModel
+import net.ivanvega.miinventorykmpcomposedesktop.ui.screens.ItemEntryScreen
+import net.ivanvega.miinventorykmpcomposedesktop.ui.screens.ItemEntryViewModel
 import org.jetbrains.compose.resources.stringResource
 
 
@@ -71,8 +73,8 @@ interface NavigationDestination {
 fun App(dataBaseFactory: DatabaseDriverFactory, navController: NavHostController = rememberNavController()) {
     val dao = remember { ItemDAO(dataBaseFactory ) }
     val itemViewModel: ItemViewModel = viewModel{  ItemViewModel(dao) }
+    val itemEntryViewModel: ItemEntryViewModel = viewModel{  ItemEntryViewModel(dao) }
     val homeViewModel: HomeViewModel = viewModel{ HomeViewModel(dao) }
-
 
     // Get current back stack entry
     val backStackEntry by navController.currentBackStackEntryAsState()
@@ -117,8 +119,11 @@ fun App(dataBaseFactory: DatabaseDriverFactory, navController: NavHostController
                 }
             }
         ) { paddingValues ->
+
             NavHost(navController = navController, startDestination = HomeDestination.route) {
+
                 composable(route = HomeDestination.route) {
+
                     ItemListScreen(
                             //viewModel = itemViewModel,
                             viewModel = homeViewModel,
@@ -135,29 +140,39 @@ fun App(dataBaseFactory: DatabaseDriverFactory, navController: NavHostController
                     )
                 }
                 composable(route = ItemEntryDestination.route) {
-                    AddItemScreen(
-                        viewModel = itemViewModel,
-                        onItemAdded = { navController.popBackStack()
-                        },
-                        Modifier.fillMaxSize().padding(paddingValues)
+                    ItemEntryScreen(
+                        navigateBack = { navController.popBackStack() },
+                        onNavigateUp = { navController.navigateUp() },
+                        viewModel = itemEntryViewModel,
+                        innerPadding = paddingValues
                     )
                 }
+//                composable(route = ItemEntryDestination.route) {
+//                    AddItemScreen(
+//                        viewModel = itemViewModel,
+//                        onItemAdded = { navController.popBackStack()
+//                        },
+//                        Modifier.fillMaxSize().padding(paddingValues)
+//                    )
+//                }
                 composable(
                     route = ItemDetailsDestination.routeWithArgs,
                     arguments = listOf(navArgument(ItemDetailsDestination.itemIdArg) {
                         type = NavType.IntType
                     })
                 ) {
+                    val viewModelItemDetail: ItemDetailsViewModel = viewModel { ItemDetailsViewModel(
+                        savedStateHandle = this.createSavedStateHandle(),
+                        itemsRepository = dao
+                    )
+                    }
+
                     ItemDetailsScreen(
                         navigateToEditItem = { navController.navigate("${ItemEditDestination.route}/$it") },
                         navigateBack = { navController.navigateUp() },
                         modifier =  Modifier.fillMaxSize().padding(paddingValues),
                         innerPadding = paddingValues,
-                        viewModel = viewModel { ItemDetailsViewModel(
-                                                    savedStateHandle = this.createSavedStateHandle(),
-                                                    itemsRepository = dao
-                                                )
-                        }
+                        viewModel = viewModelItemDetail
                     )
                 }
                 composable(
@@ -166,15 +181,16 @@ fun App(dataBaseFactory: DatabaseDriverFactory, navController: NavHostController
                         type = NavType.IntType
                     })
                 ) {
+                    val viewModelItemEdit: ItemEditViewModel = viewModel{
+                        ItemEditViewModel(
+                            savedStateHandle = this.createSavedStateHandle(),
+                            itemsRepository = dao
+                        )
+                    }
                     ItemEditScreen(navigateBack = { navController.popBackStack() },
                         onNavigateUp = { navController.navigateUp() },
                         innerPadding = paddingValues,
-                        viewModel = viewModel {
-                                                    ItemEditViewModel(
-                                                        savedStateHandle = this.createSavedStateHandle(),
-                                                        itemsRepository = dao
-                                                    )
-                        }
+                        viewModel = viewModelItemEdit
                     )
                 }
             }

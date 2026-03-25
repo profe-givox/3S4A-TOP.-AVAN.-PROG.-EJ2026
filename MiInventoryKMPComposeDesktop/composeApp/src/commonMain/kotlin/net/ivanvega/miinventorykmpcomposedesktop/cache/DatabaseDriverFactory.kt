@@ -44,4 +44,8 @@ class ItemDAO(databaseDriverFactory: DatabaseDriverFactory) {
         return dbQuery.getItemById(id).asFlow().mapToOne(Dispatchers.IO)
     }
 
+    fun insertItem(item: Item) {
+        dbQuery.insertItem(item.name, item.price, item.quantity)
+    }
+
 }
