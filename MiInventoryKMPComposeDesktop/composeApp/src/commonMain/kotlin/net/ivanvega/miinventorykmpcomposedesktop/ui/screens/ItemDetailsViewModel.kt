@@ -44,7 +44,7 @@ class ItemDetailsViewModel(
         viewModelScope.launch {
             val currentItem = uiState.value.itemDetails.toItem()
             if (currentItem.quantity > 0) {
-                //itemsRepository.updateItem(currentItem.copy(quantity = currentItem.quantity - 1))
+                itemsRepository.updateItem(currentItem.copy(quantity = currentItem.quantity - 1))
             }
         }
     }
@@ -53,7 +53,7 @@ class ItemDetailsViewModel(
      * Deletes the item from the [ItemsRepository]'s data source.
      */
     suspend fun deleteItem() {
-        //itemsRepository.deleteItem(uiState.value.itemDetails.toItem())
+        itemsRepository.deleteItem(uiState.value.itemDetails.toItem())
     }
 
     companion object {

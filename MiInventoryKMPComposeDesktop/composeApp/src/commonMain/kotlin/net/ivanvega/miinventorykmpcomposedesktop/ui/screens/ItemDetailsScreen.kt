@@ -69,8 +69,8 @@ fun ItemDetailsScreen(
     innerPadding: PaddingValues ,
     viewModel: ItemDetailsViewModel
 ) {
-    val uiState = viewModel.uiState.collectAsState()
-    val coroutineScope = rememberCoroutineScope()
+        val uiState = viewModel.uiState.collectAsState()
+        val coroutineScope = rememberCoroutineScope()
     /*Scaffold(
         topBar = {
             InventoryTopAppBar(
@@ -100,7 +100,7 @@ fun ItemDetailsScreen(
         ItemDetailsBody(
             itemDetailsUiState = uiState.value,
             onSellItem = {
-                //viewModel.reduceQuantityByOne()
+                            viewModel.reduceQuantityByOne()
                          },
             onDelete = {
                 // Note: If the user rotates the screen very fast, the operation may get cancelled
@@ -108,7 +108,7 @@ fun ItemDetailsScreen(
                 // change occurs, the Activity will be recreated and the rememberCoroutineScope will
                 // be cancelled - since the scope is bound to composition.
                 coroutineScope.launch {
-                    //viewModel.deleteItem()
+                    viewModel.deleteItem()
                     navigateBack()
                 }
             },

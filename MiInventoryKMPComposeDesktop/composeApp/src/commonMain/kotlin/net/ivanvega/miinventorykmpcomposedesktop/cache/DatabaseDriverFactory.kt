@@ -36,8 +36,8 @@ class ItemDAO(databaseDriverFactory: DatabaseDriverFactory) {
         dbQuery.updateItem(item.name, item.price, item.quantity, item.id)
     }
 
-    internal fun deleteItem(id: Long) {
-        dbQuery.deleteItem(id)
+    internal fun deleteItem(item: Item) {
+        dbQuery.deleteItem(item.id)
     }
 
     internal fun getItemById(id: Long): Flow <Item?> {
