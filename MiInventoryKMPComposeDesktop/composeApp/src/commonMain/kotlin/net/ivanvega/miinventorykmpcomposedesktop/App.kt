@@ -31,6 +31,7 @@ import org.jetbrains.compose.resources.StringResource
 
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.createSavedStateHandle
 import androidx.navigation.NavController
@@ -39,6 +40,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
 import androidx.savedstate.savedState
+import net.ivanvega.miinventorykmpcomposedesktop.ui.screens.HomeViewModel
 import net.ivanvega.miinventorykmpcomposedesktop.ui.screens.ItemDetailsDestination
 import net.ivanvega.miinventorykmpcomposedesktop.ui.screens.ItemDetailsScreen
 import net.ivanvega.miinventorykmpcomposedesktop.ui.screens.ItemDetailsViewModel
@@ -69,6 +71,8 @@ interface NavigationDestination {
 fun App(dataBaseFactory: DatabaseDriverFactory, navController: NavHostController = rememberNavController()) {
     val dao = remember { ItemDAO(dataBaseFactory ) }
     val itemViewModel: ItemViewModel = viewModel{  ItemViewModel(dao) }
+    val homeViewModel: HomeViewModel = viewModel{ HomeViewModel(dao) }
+
 
     // Get current back stack entry
     val backStackEntry by navController.currentBackStackEntryAsState()
@@ -78,6 +82,8 @@ fun App(dataBaseFactory: DatabaseDriverFactory, navController: NavHostController
         else -> HomeDestination.titleRes
     }
     val canNavigateBack = navController.previousBackStackEntry != null
+
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
     MaterialTheme {
         Scaffold(
@@ -98,7 +104,8 @@ fun App(dataBaseFactory: DatabaseDriverFactory, navController: NavHostController
                                 }
                             )
                         }
-                    }
+                    },
+                    scrollBehavior = scrollBehavior
 
                 )
             },
@@ -113,11 +120,17 @@ fun App(dataBaseFactory: DatabaseDriverFactory, navController: NavHostController
             NavHost(navController = navController, startDestination = HomeDestination.route) {
                 composable(route = HomeDestination.route) {
                     ItemListScreen(
-                        viewModel = itemViewModel,
-                           onItemClick     = {
+                            //viewModel = itemViewModel,
+                            viewModel = homeViewModel,
+                            onItemClick     = {
                                navController.navigate("${ItemDetailsDestination.route}/${it.id}")
                                              },
-                        modifier =  Modifier.fillMaxSize().padding(paddingValues)
+                        navigateToItemUpdate = {
+                            navController.navigate("${ItemDetailsDestination.route}/${it}")
+                        }
+                        ,
+                        modifier =  Modifier.fillMaxSize().padding(paddingValues),
+                        innerPadding = paddingValues
 
                     )
                 }

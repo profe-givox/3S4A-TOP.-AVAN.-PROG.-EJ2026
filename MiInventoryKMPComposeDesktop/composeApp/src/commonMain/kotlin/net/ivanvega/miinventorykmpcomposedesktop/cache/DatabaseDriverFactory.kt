@@ -1,6 +1,7 @@
 package net.ivanvega.miinventorykmpcomposedesktop.cache
 
 import app.cash.sqldelight.coroutines.asFlow
+import app.cash.sqldelight.coroutines.mapToList
 import app.cash.sqldelight.coroutines.mapToOne
 import app.cash.sqldelight.db.SqlDriver
 import cache.Item
@@ -17,6 +18,10 @@ class ItemDAO(databaseDriverFactory: DatabaseDriverFactory) {
 
     internal fun getAllItems() : List<Item> {
         return dbQuery.getAllItems().executeAsList()
+    }
+
+    internal fun getAllItemsStream() : Flow<List<Item>> {
+        return dbQuery.getAllItems().asFlow().mapToList(Dispatchers.IO)
     }
 
     internal fun insertItem(name: String, price: Double, quantity: Long) {
