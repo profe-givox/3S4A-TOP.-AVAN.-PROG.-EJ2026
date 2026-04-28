@@ -57,6 +57,7 @@ fun ItemListScreen(
         itemList = homeUiState.itemList,
         onItemClick = navigateToItemUpdate,
         onExportCsv = viewModel::onExportCsv,
+        onExportPdf = viewModel::onExportPdf,
         modifier = modifier.fillMaxSize(),
         contentPadding = innerPadding,
     )
@@ -80,6 +81,7 @@ private fun HomeBody(
     itemList: List<Item>,
     onItemClick: (Long) -> Unit,
     onExportCsv: () -> Unit,
+    onExportPdf: () -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
 ) {
@@ -97,6 +99,9 @@ private fun HomeBody(
         } else {
             Button(onClick = onExportCsv) {
                 Text("Export CSV")
+            }
+            Button(onClick = onExportPdf) {
+                Text("Export PDF")
             }
             InventoryList(
                 itemList = itemList,

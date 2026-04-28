@@ -41,7 +41,9 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
 import androidx.savedstate.savedState
 import net.ivanvega.miinventorykmpcomposedesktop.cache.ExportInventoryUseCase
+import net.ivanvega.miinventorykmpcomposedesktop.cache.ExportInventoryUseCaseKlibs
 import net.ivanvega.miinventorykmpcomposedesktop.cache.InventoryExporter
+import net.ivanvega.miinventorykmpcomposedesktop.cache.InventoryExporterKlibs
 import net.ivanvega.miinventorykmpcomposedesktop.ui.screens.HomeViewModel
 import net.ivanvega.miinventorykmpcomposedesktop.ui.screens.ItemDetailsDestination
 import net.ivanvega.miinventorykmpcomposedesktop.ui.screens.ItemDetailsScreen
@@ -51,6 +53,8 @@ import net.ivanvega.miinventorykmpcomposedesktop.ui.screens.ItemEditScreen
 import net.ivanvega.miinventorykmpcomposedesktop.ui.screens.ItemEditViewModel
 import net.ivanvega.miinventorykmpcomposedesktop.ui.screens.ItemEntryScreen
 import net.ivanvega.miinventorykmpcomposedesktop.ui.screens.ItemEntryViewModel
+import okio.FileSystem
+import okio.Path
 import org.jetbrains.compose.resources.stringResource
 
 
@@ -72,7 +76,9 @@ interface NavigationDestination {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun App(dataBaseFactory: DatabaseDriverFactory, inventoryExporter: InventoryExporter , navController: NavHostController = rememberNavController()) {
+fun App(dataBaseFactory: DatabaseDriverFactory,
+        inventoryExporter: InventoryExporter ,
+        navController: NavHostController = rememberNavController()) {
     val dao = remember { ItemDAO(dataBaseFactory ) }
     val itemViewModel: ItemViewModel = viewModel{  ItemViewModel(dao) }
     val itemEntryViewModel: ItemEntryViewModel = viewModel{  ItemEntryViewModel(dao) }
@@ -80,6 +86,7 @@ fun App(dataBaseFactory: DatabaseDriverFactory, inventoryExporter: InventoryExpo
         ExportInventoryUseCase(dao,
              inventoryExporter
             )
+
         ) }
 
     // Get current back stack entry

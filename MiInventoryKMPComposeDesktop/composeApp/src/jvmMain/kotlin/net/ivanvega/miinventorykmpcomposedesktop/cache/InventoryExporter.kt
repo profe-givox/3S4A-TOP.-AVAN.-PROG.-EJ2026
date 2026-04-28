@@ -7,7 +7,7 @@ import org.openpdf.text.pdf.PdfWriter
 import java.io.File
 import java.io.FileOutputStream
 
-actual class InventoryExporter {
+actual open class InventoryExporter {
 
     actual suspend fun exportCsv(data: List<InventoryExportRow>) {
         val file = File("inventory_export.csv")
@@ -38,6 +38,6 @@ actual class InventoryExporter {
         }
 
         document.close()
-
+        println("$document")
     }
 }

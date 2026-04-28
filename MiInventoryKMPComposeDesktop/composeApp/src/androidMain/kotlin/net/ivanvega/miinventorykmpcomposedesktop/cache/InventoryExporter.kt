@@ -7,11 +7,18 @@ import cache.Item
 import java.io.File
 import java.io.FileOutputStream
 
-actual class InventoryExporter(private val context: Context) {
+actual open class InventoryExporter(private val context: Context) {
 
     actual suspend fun exportCsv(data: List<InventoryExportRow>) {
+            println("Inicio Export:" + context.filesDir)
         val file = File(context.filesDir, "inventory_export.csv")
-        file.writeText(data.joinToString(separator = "\n"))
+        file.writeText(buildString {
+            appendLine("Nombre,Cantidad,Precio")
+            data.forEach {
+                appendLine("${it.name},${it.quantity},${it.price}")
+            }
+        })
+        println("Inicio Export:" + context.filesDir)
     }
 
     actual suspend fun exportPdf(data: List<Item>) {

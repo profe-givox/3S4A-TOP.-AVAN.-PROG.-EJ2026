@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import net.ivanvega.miinventorykmpcomposedesktop.cache.ExportInventoryUseCase
+import net.ivanvega.miinventorykmpcomposedesktop.cache.ExportInventoryUseCaseKlibs
 import net.ivanvega.miinventorykmpcomposedesktop.cache.InventoryExporter
 import net.ivanvega.miinventorykmpcomposedesktop.cache.ItemDAO
 
@@ -17,7 +18,10 @@ import net.ivanvega.miinventorykmpcomposedesktop.cache.ItemDAO
  * ViewModel to retrieve all items in the Room database.
  */
 class HomeViewModel(val itemsRepository: ItemDAO,
-                    val exportUseCase: ExportInventoryUseCase) : ViewModel() {
+                    val exportUseCase: ExportInventoryUseCase
+
+
+                    ) : ViewModel() {
 
     fun onExportCsv() {
         viewModelScope.launch {
