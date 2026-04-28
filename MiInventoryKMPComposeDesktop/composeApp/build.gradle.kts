@@ -31,8 +31,13 @@ kotlin {
             implementation(libs.sqlDelight.android.driver)
         }
         commonMain.dependencies {
+            implementation(libs.pdfium)
+            implementation(libs.csv)
+            implementation(libs.okio)
+
             implementation(libs.sqlDelight.coroutines.extensions)
             implementation(libs.sqlDelight.runtime)
+
             implementation(libs.compose.runtime)
             implementation(libs.compose.foundation)
             implementation(libs.compose.material3)
@@ -50,6 +55,8 @@ kotlin {
             implementation(libs.kotlin.test)
         }
         jvmMain.dependencies {
+            implementation(libs.openpdf)
+
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutinesSwing)
             implementation(libs.sqlDelight.sqlite.driver)

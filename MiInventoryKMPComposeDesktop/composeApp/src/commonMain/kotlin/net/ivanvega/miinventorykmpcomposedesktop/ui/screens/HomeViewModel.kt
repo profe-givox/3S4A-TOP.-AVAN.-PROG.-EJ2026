@@ -8,12 +8,27 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
+import net.ivanvega.miinventorykmpcomposedesktop.cache.ExportInventoryUseCase
 import net.ivanvega.miinventorykmpcomposedesktop.cache.ItemDAO
 
 /**
  * ViewModel to retrieve all items in the Room database.
  */
-class HomeViewModel(itemsRepository: ItemDAO) : ViewModel() {
+class HomeViewModel(itemsRepository: ItemDAO,
+                    exportUseCase: ExportInventoryUseCase) : ViewModel() {
+
+    fun onExportCsv() {
+        viewModelScope.launch {
+            //exportUseCase.exportToCsv()
+        }
+    }
+
+    fun onExportPdf() {
+        viewModelScope.launch {
+           //exportUseCase.exportToPdf()
+        }
+    }
 
     /**
      * Holds home ui state. The list of items are retrieved from [ItemsRepository] and mapped to
@@ -26,10 +41,13 @@ class HomeViewModel(itemsRepository: ItemDAO) : ViewModel() {
                 started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
                 initialValue = HomeUiState()
             )
-
     companion object {
         private const val TIMEOUT_MILLIS = 5_000L
     }
+
+
+
+
 }
 
 /**

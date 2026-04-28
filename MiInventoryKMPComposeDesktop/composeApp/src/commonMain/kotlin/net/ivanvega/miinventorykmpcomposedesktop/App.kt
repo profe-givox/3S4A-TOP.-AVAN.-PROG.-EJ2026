@@ -40,6 +40,8 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
 import androidx.savedstate.savedState
+import net.ivanvega.miinventorykmpcomposedesktop.cache.ExportInventoryUseCase
+import net.ivanvega.miinventorykmpcomposedesktop.cache.InventoryExporter
 import net.ivanvega.miinventorykmpcomposedesktop.ui.screens.HomeViewModel
 import net.ivanvega.miinventorykmpcomposedesktop.ui.screens.ItemDetailsDestination
 import net.ivanvega.miinventorykmpcomposedesktop.ui.screens.ItemDetailsScreen
@@ -70,11 +72,15 @@ interface NavigationDestination {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun App(dataBaseFactory: DatabaseDriverFactory, navController: NavHostController = rememberNavController()) {
+fun App(dataBaseFactory: DatabaseDriverFactory, inventoryExporter: InventoryExporter , navController: NavHostController = rememberNavController()) {
     val dao = remember { ItemDAO(dataBaseFactory ) }
     val itemViewModel: ItemViewModel = viewModel{  ItemViewModel(dao) }
     val itemEntryViewModel: ItemEntryViewModel = viewModel{  ItemEntryViewModel(dao) }
-    val homeViewModel: HomeViewModel = viewModel{ HomeViewModel(dao) }
+    val homeViewModel: HomeViewModel = viewModel{ HomeViewModel(dao,
+        ExportInventoryUseCase(dao,
+             inventoryExporter
+            )
+        ) }
 
     // Get current back stack entry
     val backStackEntry by navController.currentBackStackEntryAsState()
@@ -123,7 +129,6 @@ fun App(dataBaseFactory: DatabaseDriverFactory, navController: NavHostController
             NavHost(navController = navController, startDestination = HomeDestination.route) {
 
                 composable(route = HomeDestination.route) {
-
                     ItemListScreen(
                             //viewModel = itemViewModel,
                             viewModel = homeViewModel,
@@ -139,6 +144,7 @@ fun App(dataBaseFactory: DatabaseDriverFactory, navController: NavHostController
 
                     )
                 }
+
                 composable(route = ItemEntryDestination.route) {
                     ItemEntryScreen(
                         navigateBack = { navController.popBackStack() },
@@ -166,7 +172,6 @@ fun App(dataBaseFactory: DatabaseDriverFactory, navController: NavHostController
                         itemsRepository = dao
                     )
                     }
-
                     ItemDetailsScreen(
                         navigateToEditItem = { navController.navigate("${ItemEditDestination.route}/$it") },
                         navigateBack = { navController.navigateUp() },
