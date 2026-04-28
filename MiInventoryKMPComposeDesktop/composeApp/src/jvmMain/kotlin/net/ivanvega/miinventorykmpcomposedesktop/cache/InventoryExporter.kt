@@ -11,6 +11,7 @@ actual class InventoryExporter {
 
     actual suspend fun exportCsv(data: List<InventoryExportRow>) {
         val file = File("inventory_export.csv")
+        println("Inicio Export:" + file.absolutePath)
         file.writeText(
             buildString {
                 appendLine("Nombre,Cantidad,Precio")
@@ -19,6 +20,7 @@ actual class InventoryExporter {
                 }
             }
         )
+        println("Fin Export")
     }
 
     actual suspend fun exportPdf(data: List<Item>) {

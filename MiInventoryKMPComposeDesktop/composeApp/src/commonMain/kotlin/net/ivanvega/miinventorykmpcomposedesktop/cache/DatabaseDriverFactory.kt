@@ -16,7 +16,8 @@ class ItemDAO(databaseDriverFactory: DatabaseDriverFactory) {
     private val database = AppDatabase(databaseDriverFactory.createDriver())
     private val dbQuery = database.appDatabaseQueries
 
-    internal fun getAllItems() : List<Item> {
+    internal fun getAllItems() : List<Item
+            > {
         return dbQuery.getAllItems().executeAsList()
     }
 

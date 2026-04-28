@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -55,6 +56,7 @@ fun ItemListScreen(
     HomeBody(
         itemList = homeUiState.itemList,
         onItemClick = navigateToItemUpdate,
+        onExportCsv = viewModel::onExportCsv,
         modifier = modifier.fillMaxSize(),
         contentPadding = innerPadding,
     )
@@ -77,6 +79,7 @@ fun ItemListScreen(
 private fun HomeBody(
     itemList: List<Item>,
     onItemClick: (Long) -> Unit,
+    onExportCsv: () -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
 ) {
@@ -92,6 +95,9 @@ private fun HomeBody(
                 modifier = Modifier.padding(contentPadding),
             )
         } else {
+            Button(onClick = onExportCsv) {
+                Text("Export CSV")
+            }
             InventoryList(
                 itemList = itemList,
                 onItemClick = { onItemClick(it.id) },

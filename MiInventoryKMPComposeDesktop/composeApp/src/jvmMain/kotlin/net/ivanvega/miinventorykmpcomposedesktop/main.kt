@@ -2,6 +2,8 @@ package net.ivanvega.miinventorykmpcomposedesktop
 
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
+import net.ivanvega.miinventorykmpcomposedesktop.cache.ExportInventoryUseCase
+import net.ivanvega.miinventorykmpcomposedesktop.cache.InventoryExporter
 import net.ivanvega.miinventorykmpcomposedesktop.cache.JvmDatabaseDriverFactory
 
 fun main() = application {
@@ -9,6 +11,9 @@ fun main() = application {
         onCloseRequest = ::exitApplication,
         title = "miinventorykmpcomposedesktop",
     ) {
-        App(JvmDatabaseDriverFactory())
+        App(JvmDatabaseDriverFactory(),
+            InventoryExporter()
+
+        )
     }
 }
