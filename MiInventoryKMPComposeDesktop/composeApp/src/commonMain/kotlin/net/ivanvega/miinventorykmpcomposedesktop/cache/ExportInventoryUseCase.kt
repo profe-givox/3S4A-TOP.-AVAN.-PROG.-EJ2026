@@ -19,7 +19,7 @@ class ExportInventoryUseCase(
 }
 
 class ExportInventoryUseCaseKlibs(
-    private val repository: ItemDAO,
+    private val repository: ItemDAO ,
     private val exporter: InventoryExporterKlibs
 ) {
     suspend fun exportToCsv() {

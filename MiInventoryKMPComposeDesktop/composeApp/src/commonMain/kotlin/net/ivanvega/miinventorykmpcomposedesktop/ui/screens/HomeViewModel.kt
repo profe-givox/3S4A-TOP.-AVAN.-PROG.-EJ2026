@@ -18,7 +18,8 @@ import net.ivanvega.miinventorykmpcomposedesktop.cache.ItemDAO
  * ViewModel to retrieve all items in the Room database.
  */
 class HomeViewModel(val itemsRepository: ItemDAO,
-                    val exportUseCase: ExportInventoryUseCase
+                    val exportUseCase: ExportInventoryUseCase,
+            val exportUseCaseKlibs: ExportInventoryUseCaseKlibs
 
 
                     ) : ViewModel() {

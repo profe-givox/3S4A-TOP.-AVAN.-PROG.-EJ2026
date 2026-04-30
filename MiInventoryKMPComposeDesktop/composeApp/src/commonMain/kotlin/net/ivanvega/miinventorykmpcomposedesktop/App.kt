@@ -78,14 +78,18 @@ interface NavigationDestination {
 @Composable
 fun App(dataBaseFactory: DatabaseDriverFactory,
         inventoryExporter: InventoryExporter ,
+        inventoryExporterKlibs: InventoryExporterKlibs,
         navController: NavHostController = rememberNavController()) {
+
     val dao = remember { ItemDAO(dataBaseFactory ) }
     val itemViewModel: ItemViewModel = viewModel{  ItemViewModel(dao) }
     val itemEntryViewModel: ItemEntryViewModel = viewModel{  ItemEntryViewModel(dao) }
     val homeViewModel: HomeViewModel = viewModel{ HomeViewModel(dao,
         ExportInventoryUseCase(dao,
              inventoryExporter
-            )
+            ),
+            exportUseCaseKlibs = ExportInventoryUseCaseKlibs(dao,
+                 inventoryExporterKlibs)
 
         ) }
 
