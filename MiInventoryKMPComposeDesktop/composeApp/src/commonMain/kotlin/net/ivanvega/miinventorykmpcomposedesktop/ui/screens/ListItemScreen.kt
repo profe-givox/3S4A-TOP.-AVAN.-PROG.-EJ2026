@@ -56,8 +56,8 @@ fun ItemListScreen(
     HomeBody(
         itemList = homeUiState.itemList,
         onItemClick = navigateToItemUpdate,
-        onExportCsv = viewModel::onExportCsv,
-        onExportPdf = viewModel::onExportPdf,
+        onExportCsv = viewModel::onExportCsvKlibs,
+        onExportPdf = viewModel::onExportPdfKlibs,
         modifier = modifier.fillMaxSize(),
         contentPadding = innerPadding,
     )

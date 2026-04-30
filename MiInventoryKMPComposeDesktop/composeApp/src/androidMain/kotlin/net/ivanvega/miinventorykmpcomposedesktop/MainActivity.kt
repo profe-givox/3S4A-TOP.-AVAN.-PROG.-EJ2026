@@ -17,7 +17,6 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
-
         // ✅ FileSystem multiplataforma
         val fileSystem = FileSystem.SYSTEM
 
