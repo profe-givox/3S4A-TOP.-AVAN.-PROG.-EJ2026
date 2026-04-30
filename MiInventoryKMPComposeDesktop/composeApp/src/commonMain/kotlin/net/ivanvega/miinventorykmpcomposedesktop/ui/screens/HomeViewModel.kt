@@ -36,6 +36,18 @@ class HomeViewModel(val itemsRepository: ItemDAO,
         }
     }
 
+    fun onExportCsvKlibs() {
+        viewModelScope.launch {
+            exportUseCaseKlibs.exportToCsv()
+        }
+    }
+
+    fun onExportPdfKlibs() {
+        viewModelScope.launch {
+            exportUseCaseKlibs.exportToPdf()
+        }
+    }
+
     /**
      * Holds home ui state. The list of items are retrieved from [ItemsRepository] and mapped to
      * [HomeUiState]
