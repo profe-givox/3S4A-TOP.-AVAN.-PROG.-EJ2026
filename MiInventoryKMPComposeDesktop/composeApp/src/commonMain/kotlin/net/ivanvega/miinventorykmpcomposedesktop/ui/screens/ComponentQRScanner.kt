@@ -39,6 +39,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.ClipboardManager
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontFamily
@@ -51,7 +52,7 @@ import miinventorykmpcomposedesktop.composeapp.generated.resources.Res
 import miinventorykmpcomposedesktop.composeapp.generated.resources.ic_gallery_icon
 import net.ivanvega.miinventorykmpcomposedesktop.getPlatform
 import org.jetbrains.compose.resources.painterResource
-import org.jetbrains.skiko.ClipboardManager
+
 import qrscanner.CameraLens
 import qrscanner.QrScanner
 
@@ -72,7 +73,7 @@ fun QrScannerView(onNavigate: (String) -> Unit) {
     var openImagePicker by remember { mutableStateOf(value = false) }
     val snackBarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
-    val clipboardManager: ClipboardManager = ClipboardManager()
+    val clipboardManager: ClipboardManager = LocalClipboardManager.current
 
     Box(modifier = Modifier.fillMaxSize().statusBarsPadding()) {
         Column(
@@ -207,8 +208,7 @@ fun QrScannerView(onNavigate: (String) -> Unit) {
                     Icons.Filled.CopyAll,
                     "CopyAll",
                     modifier = Modifier.size(20.dp).clickable {
-                        clipboardManager.setText(AnnotatedString((qrCodeURL)).toString())
-                    },
+                        clipboardManager.setText(AnnotatedString((qrCodeURL)))},
                     tint = Color.White
                 )
             }
