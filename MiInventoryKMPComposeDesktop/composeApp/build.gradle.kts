@@ -29,8 +29,14 @@ kotlin {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.activity.compose)
             implementation(libs.sqlDelight.android.driver)
+
         }
         commonMain.dependencies {
+
+            implementation(libs.material.icons.extended) // O la versión más reciente
+
+            implementation(libs.qr.kit)
+
             implementation(libs.pdfium)
             implementation(libs.csv)
             implementation(libs.okio)
@@ -55,6 +61,7 @@ kotlin {
             implementation(libs.kotlin.test)
         }
         jvmMain.dependencies {
+
             implementation(libs.openpdf)
 
             implementation(compose.desktop.currentOs)

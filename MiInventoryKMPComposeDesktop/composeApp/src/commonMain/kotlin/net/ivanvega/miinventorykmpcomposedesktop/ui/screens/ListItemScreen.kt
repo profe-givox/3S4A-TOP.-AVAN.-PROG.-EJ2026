@@ -3,12 +3,15 @@ package net.ivanvega.miinventorykmpcomposedesktop.ui.screens
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
@@ -26,12 +29,14 @@ import miinventorykmpcomposedesktop.composeapp.generated.resources.Res
 import miinventorykmpcomposedesktop.composeapp.generated.resources.app_name
 import net.ivanvega.miinventorykmpcomposedesktop.NavigationDestination
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import cache.Item
 import miinventorykmpcomposedesktop.composeapp.generated.resources.in_stock
 import miinventorykmpcomposedesktop.composeapp.generated.resources.no_item_description
 import org.jetbrains.compose.resources.stringResource
+import qrscanner.QrScanner
 
 
 object HomeDestination : NavigationDestination {
@@ -97,11 +102,21 @@ private fun HomeBody(
                 modifier = Modifier.padding(contentPadding),
             )
         } else {
-            Button(onClick = onExportCsv) {
-                Text("Export CSV")
-            }
-            Button(onClick = onExportPdf) {
-                Text("Export PDF")
+            Row (modifier = Modifier.height(200.dp)){
+                Column () {
+                    Button(onClick = onExportCsv) {
+                        Text("Export CSV")
+                    }
+                    Button(onClick = onExportPdf) {
+                        Text("Export PDF")
+                    }
+                }
+
+                QrScannerView(){   par ->
+                    println(par)
+                }
+
+
             }
             InventoryList(
                 itemList = itemList,

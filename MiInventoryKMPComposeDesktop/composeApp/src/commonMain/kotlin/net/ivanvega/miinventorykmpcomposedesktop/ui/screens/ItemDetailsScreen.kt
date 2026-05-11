@@ -1,5 +1,6 @@
 package net.ivanvega.miinventorykmpcomposedesktop.ui.screens
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
@@ -52,6 +54,7 @@ import miinventorykmpcomposedesktop.composeapp.generated.resources.yes
 import net.ivanvega.miinventorykmpcomposedesktop.NavigationDestination
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
+import qrgenerator.qrkitpainter.rememberQrKitPainter
 
 object ItemDetailsDestination : NavigationDestination {
     override val route = "item_details"
@@ -133,6 +136,12 @@ private fun ItemDetailsBody(
     modifier: Modifier = Modifier,
 
 ) {
+    val painter = rememberQrKitPainter(data = "${itemDetailsUiState.itemDetails.id}|" +
+            "${itemDetailsUiState.itemDetails.name}|" +
+            "${itemDetailsUiState.itemDetails.quantity}|" +
+            "${itemDetailsUiState.itemDetails.price}"
+    )
+
     Column(
         modifier = modifier.padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
@@ -166,6 +175,12 @@ private fun ItemDetailsBody(
         ) {
             Text(stringResource(Res.string.delete))
         }
+
+        Image(
+            painter = painter,
+            contentDescription = null,
+            modifier = Modifier.size(100.dp)
+        )
         if (deleteConfirmationRequired) {
             DeleteConfirmationDialog(
                 onDeleteConfirm = {
